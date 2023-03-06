@@ -1,5 +1,6 @@
 package com.nickfinance.nikfinance.features.add
 
+import android.app.Application
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.nickfinance.nikfinance.base.BaseRowHolder
@@ -8,18 +9,17 @@ import com.nickfinance.nikfinance.data.models.Theme
 import com.nickfinance.nikfinance.domain.models.AddExpenseData
 import com.nickfinance.nikfinance.domain.repositories.abstractions.MainRepository
 import com.nickfinance.nikfinance.features.add.adapter.ThemesRowHolder
-import com.nickfinance.nikfinance.features.main.MainViewModel
+import com.nickfinance.nikfinance.base.executor.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AddExpenseViewModel @Inject constructor(
+    application: Application,
     private val mainRepository: MainRepository
-) : BaseViewModel() {
+) : BaseViewModel(application) {
 
     private val _themesUiState = MutableStateFlow<ThemesUiState>(ThemesUiState.Loading)
     val themesUiState = _themesUiState.stateIn(
@@ -42,23 +42,31 @@ class AddExpenseViewModel @Inject constructor(
     }
 
     private fun getThemes(selectedTheme: Theme? = null) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _themesUiState.value = ThemesUiState.Success(
-                    data = mainRepository.getThemes().map {
-                        ThemesRowHolder(
-                            theme = it,
-                            isSelected = selectedTheme == it,
-                            toSelect = {
-                                addExpenseData.value = addExpenseData.value.copy(theme = it)
-                                getThemes(it)
+        doFlowJob(
+            onProgress = {
+                mainRepository.getThemes()
+            },
+            onFinish = { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _themesUiState.value = ThemesUiState.Success(
+                            data = result.data.map {
+                                ThemesRowHolder(
+                                    theme = it,
+                                    isSelected = selectedTheme == it,
+                                    toSelect = {
+                                        addExpenseData.value = addExpenseData.value.copy(theme = it)
+                                        getThemes(it)
+                                    }
+                                )
                             }
                         )
                     }
-                )
 
+                    is Result.Error -> {}
+                }
             }
-        }
+        )
     }
 
     fun onAmountTextChanged(text: String) {

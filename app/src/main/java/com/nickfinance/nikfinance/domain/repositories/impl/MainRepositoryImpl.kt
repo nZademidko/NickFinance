@@ -15,12 +15,12 @@ class MainRepositoryImpl @Inject constructor(
 ) : MainRepository {
 
     override fun getExpensesWithThemes(): Flow<List<ExpenseWithTheme>> =
-        database
-            .getAllExpensesWithThemes()
+        database.getAllExpensesWithThemes()
             .map { list -> list.map { it.toExpenseWithTheme() } }
 
-    override suspend fun getThemes(): List<Theme> =
-        database.getThemes().map { item -> item.toTheme() }
+    override fun getThemes(): Flow<List<Theme>> =
+        database.getThemes()
+            .map { list -> list.map { it.toTheme() } }
 
     override suspend fun saveExpense(data: AddExpenseData) {
         database.createExpense(data.toExpenseDBE())

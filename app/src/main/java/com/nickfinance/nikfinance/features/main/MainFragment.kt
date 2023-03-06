@@ -12,9 +12,7 @@ import com.nickfinance.nikfinance.features.main.adapter.adapterMainListExpensesD
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainFragment : BaseFragment<FragmentMainBinding>() {
-
-    private val vm by viewModels<MainViewModel>()
+class MainFragment : BaseFragment<MainViewModel, FragmentMainBinding>() {
 
     private lateinit var adapter: BaseRowHolderAdapter
 

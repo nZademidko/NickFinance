@@ -11,9 +11,7 @@ import com.nickfinance.nikfinance.features.add.adapter.adapterThemesDelegate
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AddExpenseFragment : BaseFragment<FragmentAddExpenseBinding>() {
-
-    private val vm by viewModels<AddExpenseViewModel>()
+class AddExpenseFragment : BaseFragment<AddExpenseViewModel, FragmentAddExpenseBinding>() {
 
     private lateinit var adapter: BaseRowHolderAdapter
 

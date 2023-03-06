@@ -9,7 +9,7 @@ interface MainRepository {
 
     fun getExpensesWithThemes(): Flow<List<ExpenseWithTheme>>
 
-    suspend fun getThemes(): List<Theme>
+    fun getThemes(): Flow<List<Theme>>
 
     suspend fun saveExpense(data: AddExpenseData)
 }

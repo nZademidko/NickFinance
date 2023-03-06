@@ -9,6 +9,8 @@ import com.nickfinance.nikfinance.data.database.entity.ExpenseWithThemeDBE
 import com.nickfinance.nikfinance.data.database.entity.ThemeDBE
 import kotlinx.coroutines.flow.Flow
 
+
+//language=sql
 @Dao
 interface ExpensesDao {
 
@@ -23,5 +25,6 @@ interface ExpensesDao {
     fun getAllExpensesWithThemes(): Flow<List<ExpenseWithThemeDBE>>
 
     @Query("SELECT * FROM themes")
-    suspend fun getThemes(): List<ThemeDBE>
+    fun getThemes(): Flow<List<ThemeDBE>>
+
 }
