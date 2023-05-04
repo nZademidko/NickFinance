@@ -1,4 +1,4 @@
-package com.nickfinance.nikfinance.base
+package com.nickfinance.nikfinance.base.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

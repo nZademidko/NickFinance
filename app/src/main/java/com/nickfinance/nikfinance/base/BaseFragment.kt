@@ -13,6 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.yandex.metrica.impl.ob.Ba
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +37,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initBaseObservers()
         initCustomObservers()
     }
 
@@ -50,6 +53,20 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     }
 
     abstract fun initCustomObservers()
+
+    private fun initBaseObservers() {
+        vm._navigationAction.observe { action ->
+            when (action) {
+                is BaseViewModel.NavigationAction.navigateTo -> {
+                    findNavController().navigate(action.navDirections)
+                }
+
+                is BaseViewModel.NavigationAction.navigateBack -> {
+                    findNavController().popBackStack()
+                }
+            }
+        }
+    }
 
     protected fun navigateTo(direction: NavDirections) {
         findNavController().navigate(direction)
@@ -85,6 +102,15 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         }
 
     protected inline fun <T> SharedFlow<T>.observe(crossinline observer: (T) -> Unit) =
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                this@observe.collect { data ->
+                    observer(data)
+                }
+            }
+        }
+
+    protected inline fun <T> Flow<T>.observe(crossinline observer: (T) -> Unit) =
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 this@observe.collect { data ->

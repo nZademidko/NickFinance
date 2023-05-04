@@ -1,4 +1,4 @@
-package com.nickfinance.nikfinance.base
+package com.nickfinance.nikfinance.base.adapter
 
 interface RowHolderAdapter {
 

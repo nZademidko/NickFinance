@@ -2,18 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/mainFragment">
-
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.nickfinance.nikfinance.features.main.MainFragment"
-        android:label="MainFragment">
-
-        <action
-            android:id="@+id/toAddExpense"
-            app:destination="@id/addExpenseFragment" />
-
-    </fragment>
+    app:startDestination="@id/mainPagerFragment">
 
     <fragment
         android:id="@+id/addExpenseFragment"
@@ -21,10 +10,20 @@
         android:label="AddExpenseFragment">
 
         <action
-            android:id="@+id/toMainFragment"
-            app:destination="@id/mainFragment"
-            app:popUpTo="@id/mainFragment"
+            android:id="@+id/toMainPagerFragment"
+            app:destination="@id/mainPagerFragment"
+            app:popUpTo="@id/mainPagerFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainPagerFragment"
+        android:name="com.nickfinance.nikfinance.features.main.pager.MainPagerFragment"
+        android:label="MainPagerFragment" >
+
+        <action
+            android:id="@+id/toAddExpense"
+            app:destination="@id/addExpenseFragment" />
 
     </fragment>
 

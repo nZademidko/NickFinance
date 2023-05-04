@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NikFinance</string>
+    <string name="main_tab_list">Список</string>
+    <string name="main_tab_chart">График</string>
 </resources>

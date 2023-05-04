@@ -3,7 +3,7 @@ package com.nickfinance.nikfinance.features.add
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
-import com.nickfinance.nikfinance.base.BaseRowHolder
+import com.nickfinance.nikfinance.base.adapter.BaseRowHolder
 import com.nickfinance.nikfinance.base.BaseViewModel
 import com.nickfinance.nikfinance.data.models.Theme
 import com.nickfinance.nikfinance.domain.models.AddExpenseData
@@ -80,7 +80,7 @@ class AddExpenseViewModel @Inject constructor(
     fun save() {
         viewModelScope.launch {
             mainRepository.saveExpense(data = addExpenseData.value)
-            navigateState.emit(AddExpenseFragmentDirections.toMainFragment())
+            navigateState.emit(AddExpenseFragmentDirections.toMainPagerFragment())
         }
     }
 

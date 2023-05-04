@@ -17,6 +17,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,6 +26,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    kapt{
+        arguments{
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
     compileOptions {
@@ -79,4 +85,8 @@ dependencies {
     kapt "androidx.room:room-compiler:2.5.0"
     implementation "androidx.room:room-guava:2.5.0"
     kapt "org.xerial:sqlite-jdbc:3.36.0.3"
+
+    implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
+    implementation 'com.github.blackfizz:eazegraph:1.2.5l@aar'
+    implementation 'com.nineoldandroids:library:2.4.0'
 }

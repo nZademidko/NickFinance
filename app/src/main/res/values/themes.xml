@@ -28,4 +28,29 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
     </style>
+
+    <style name="Widget.App.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:background">@color/md_theme_light_primaryContainer</item>
+        <item name="tabIndicatorColor">@color/md_theme_light_onPrimaryContainer</item>
+        <item name="tabSelectedTextColor">@color/md_theme_light_onPrimaryContainer</item>
+        <item name="tabTextColor">@color/md_theme_light_secondary</item>
+        <item name="tabIndicatorHeight">2dp</item>
+    </style>
+
+    <style name="Widget.App.Toolbar" parent="Widget.Design.CollapsingToolbar">
+        <item name="android:background">@color/md_theme_light_primaryContainer</item>
+        <item name="tabIndicatorColor">@color/md_theme_light_onPrimaryContainer</item>
+        <item name="tabSelectedTextColor">@color/md_theme_light_onPrimaryContainer</item>
+        <item name="tabTextColor">@color/md_theme_light_secondary</item>
+        <item name="tabIndicatorHeight">2dp</item>
+    </style>
+
+    <style name="TabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="lineHeight">20sp</item>
+    </style>
+
 </resources>

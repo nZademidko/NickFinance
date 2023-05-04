@@ -18,9 +18,8 @@ class DataBaseModule {
     @Singleton
     @Provides
     fun provideDataBase(@ApplicationContext applicationContext: Context): AppDataBase =
-        Room.databaseBuilder(
-            applicationContext, AppDataBase::class.java, "database.db"
-        ).createFromAsset("database/initialdb.db")
+        Room.databaseBuilder(applicationContext, AppDataBase::class.java, "database.db")
+            .createFromAsset("database/initial_database.db")
             .build()
 
     @Singleton

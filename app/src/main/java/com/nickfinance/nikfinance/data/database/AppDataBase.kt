@@ -6,7 +6,7 @@ import com.nickfinance.nikfinance.data.database.entity.ExpenseDBE
 import com.nickfinance.nikfinance.data.database.entity.ThemeDBE
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         ExpenseDBE::class, ThemeDBE::class
     ],

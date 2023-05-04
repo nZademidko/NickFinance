@@ -1,11 +1,11 @@
 package com.nickfinance.nikfinance.features.add.adapter
 
 import com.nickfinance.nikfinance.R
-import com.nickfinance.nikfinance.base.BaseRowHolder
-import com.nickfinance.nikfinance.base.baseAdapterDelegate
+import com.nickfinance.nikfinance.base.adapter.BaseRowHolder
+import com.nickfinance.nikfinance.base.adapter.baseAdapterDelegate
 import com.nickfinance.nikfinance.data.models.Theme
 import com.nickfinance.nikfinance.databinding.ItemThemeBinding
-import com.nickfinance.nikfinance.utils.getColorStateListCompat
+import com.nickfinance.nikfinance.utils.extensions.getColorStateListCompat
 
 class ThemesRowHolder(
     val theme: Theme,

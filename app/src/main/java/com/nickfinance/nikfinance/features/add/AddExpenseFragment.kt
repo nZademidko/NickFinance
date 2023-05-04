@@ -3,9 +3,8 @@ package com.nickfinance.nikfinance.features.add
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.viewModels
 import com.nickfinance.nikfinance.base.BaseFragment
-import com.nickfinance.nikfinance.base.BaseRowHolderAdapter
+import com.nickfinance.nikfinance.base.adapter.BaseRowHolderAdapter
 import com.nickfinance.nikfinance.databinding.FragmentAddExpenseBinding
 import com.nickfinance.nikfinance.features.add.adapter.adapterThemesDelegate
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +34,6 @@ class AddExpenseFragment : BaseFragment<AddExpenseViewModel, FragmentAddExpenseB
         vb.bContinue.setOnClickListener {
             vm.save()
         }
-
     }
 
     override fun initCustomObservers() {
