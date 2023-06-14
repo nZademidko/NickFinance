@@ -2,4 +2,14 @@
     <string name="app_name">NikFinance</string>
     <string name="main_tab_list">Список</string>
     <string name="main_tab_chart">График</string>
+
+    <string name="key_add_icon_theme">Ключ добавления иконки для темы</string>
+    <string name="data_add_icon_theme">Значение добавления иконки для темы </string>
+
+    <string name="key_filter">Ключ фильтров</string>
+    <string name="data_filter">Значение фильтров</string>
+
+    <string name="key_location">Ключ локации</string>
+    <string name="data_location">Значение локации</string>
+
 </resources>

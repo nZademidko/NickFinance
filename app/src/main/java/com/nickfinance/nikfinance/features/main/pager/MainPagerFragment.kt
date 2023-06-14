@@ -9,7 +9,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nickfinance.nikfinance.R
 import com.nickfinance.nikfinance.base.BaseFragment
+import com.nickfinance.nikfinance.base.MessageReceiver
 import com.nickfinance.nikfinance.databinding.FragmentMainPagerBinding
+import com.nickfinance.nikfinance.features.main.FilterDialogFragment
 import com.nickfinance.nikfinance.features.main.MainTab
 import com.nickfinance.nikfinance.features.main.chart.ChartFragment
 import com.nickfinance.nikfinance.features.main.list.ListFragment
@@ -37,8 +39,16 @@ class MainPagerFragment : BaseFragment<MainPagerViewModel, FragmentMainPagerBind
 
     private var fabClicked = false
 
+    override fun resIdsRequestKey(): List<Int> {
+        return listOf(
+            R.string.key_filter
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        registerPermissions()
+        fabClicked = false
         if (savedInstanceState != null) {
             listFragment = childFragmentManager.findFragmentByTag("f0") as ListFragment?
             chartFragment = childFragmentManager.findFragmentByTag("f1") as ChartFragment?
@@ -47,7 +57,6 @@ class MainPagerFragment : BaseFragment<MainPagerViewModel, FragmentMainPagerBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val list = MainTab.values()
         adapter = ViewStateAdapter(this, list)
         vb.vpPager.adapter = adapter
@@ -56,8 +65,38 @@ class MainPagerFragment : BaseFragment<MainPagerViewModel, FragmentMainPagerBind
         TabLayoutMediator(vb.tabLayout, vb.vpPager) { tab, position ->
             tab.text = getString(list[position].title)
         }.attach()
+
         vb.fabAddGeneral.setOnClickListener {
             onAddButtonClicked()
+        }
+
+        vb.fabAddExpense.setOnClickListener {
+            vm.toAddExpense()
+        }
+
+        vb.fabAddTheme.setOnClickListener {
+            vm.toAddTheme()
+        }
+
+        vb.btnFilter.setOnClickListener {
+            vm.onFilterClicked()
+        }
+
+        vb.tbMain.setNavigationOnClickListener {
+            vb.drawerLayout.open()
+        }
+
+        vb.nvMain.setNavigationItemSelectedListener { item ->
+            vb.drawerLayout.close()
+            when (item.itemId) {
+                R.id.expense_map_item -> {
+                    vm.toExpensesMap()
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
         }
     }
 
@@ -75,6 +114,19 @@ class MainPagerFragment : BaseFragment<MainPagerViewModel, FragmentMainPagerBind
                 }
             }
         }
+        vm.chooseFilterAction.observe { data ->
+            FilterDialogFragment.openDialog(this@MainPagerFragment, data)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        fabClicked = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fabClicked = false
     }
 
     private fun onAddButtonClicked() {

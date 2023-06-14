@@ -5,23 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.clearFragmentResultListener
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import com.yandex.metrica.impl.ob.Ba
+import com.google.android.material.snackbar.Snackbar
+import com.nickfinance.nikfinance.utils.FragmentResultListener
+import com.yandex.metrica.impl.ob.Ch
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.lang.reflect.ParameterizedType
 
-abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : PermissionFragment(),
+    FragmentResultListener {
 
     @Suppress("UNCHECKED_CAST")
     protected val vb: VB
@@ -29,10 +35,26 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     protected lateinit var vm: VM
     private var _binding: ViewBinding? = null
     private var container: FrameLayout? = null
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vm = createViewModelInstance()
+
+        onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                vm.onBackPressed()
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
+        resIdsRequestKey().forEach { resId ->
+            clearFragmentResultListener(getString(resId))
+            setFragmentResultListener(requestKey = getString(resId)) { key, bundle ->
+                vm.onFragmentResult(key, bundle)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,24 +74,50 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         return this.container!!
     }
 
+    override fun resIdsRequestKey() = listOf<Int>()
+
+    override fun resIdsRequestKeyForViewPager() = listOf<Int>()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        onBackPressedCallback.remove()
+    }
+
     abstract fun initCustomObservers()
 
     private fun initBaseObservers() {
         vm._navigationAction.observe { action ->
             when (action) {
-                is BaseViewModel.NavigationAction.navigateTo -> {
+                is BaseViewModel.NavigationAction.NavigateTo -> {
                     findNavController().navigate(action.navDirections)
                 }
 
-                is BaseViewModel.NavigationAction.navigateBack -> {
-                    findNavController().popBackStack()
+                is BaseViewModel.NavigationAction.NavigateBack -> {
+                    if (!findNavController().popBackStack()) {
+                        requireActivity().finish()
+                    }
                 }
             }
         }
+
+        vm._fragmentResultAction.observe { action ->
+            setFragmentResult(
+                getString(action.first),
+                action.second
+            )
+        }
+
+        vm._requestPermissionAction.observe { pair ->
+            requestPermissions(pair.first, pair.second)
+        }
+
+        vm._showSnackBarAction.observe { text ->
+            showSnackBar(text)
+        }
     }
 
-    protected fun navigateTo(direction: NavDirections) {
-        findNavController().navigate(direction)
+    private fun showSnackBar(text: CharSequence) {
+        Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -93,8 +141,8 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     }
 
     protected inline fun <T> StateFlow<T>.observe(crossinline observer: (T) -> Unit) =
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 this@observe.collect { data ->
                     observer(data)
                 }
@@ -102,8 +150,8 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         }
 
     protected inline fun <T> SharedFlow<T>.observe(crossinline observer: (T) -> Unit) =
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 this@observe.collect { data ->
                     observer(data)
                 }
@@ -111,8 +159,8 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         }
 
     protected inline fun <T> Flow<T>.observe(crossinline observer: (T) -> Unit) =
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 this@observe.collect { data ->
                     observer(data)
                 }

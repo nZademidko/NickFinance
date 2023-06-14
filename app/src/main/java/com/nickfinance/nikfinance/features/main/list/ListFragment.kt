@@ -1,10 +1,12 @@
 package com.nickfinance.nikfinance.features.main.list
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.nickfinance.nikfinance.base.BaseFragment
 import com.nickfinance.nikfinance.base.adapter.BaseRowHolderAdapter
 import com.nickfinance.nikfinance.base.adapter.holders.adapterSingleLineDelegate
+import com.nickfinance.nikfinance.base.adapter.holders.adapterTimeDelegate
 import com.nickfinance.nikfinance.databinding.FragmentListBinding
 import com.nickfinance.nikfinance.domain.models.ExpenseWithTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,15 +16,16 @@ class ListFragment : BaseFragment<ListViewModel, FragmentListBinding>() {
 
     private lateinit var adapter: BaseRowHolderAdapter
 
+    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = BaseRowHolderAdapter(
-            adapterSingleLineDelegate()
+            adapterSingleLineDelegate(),
+            adapterTimeDelegate()
         )
 
         vb.rvExpanses.adapter = adapter
-
     }
 
     fun refreshData(data: List<ExpenseWithTheme>) {

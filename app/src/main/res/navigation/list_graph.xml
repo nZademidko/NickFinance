@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_graph"
+    app:startDestination="@id/mainPagerFragment">
+
+    <fragment
+        android:id="@+id/mainPagerFragment"
+        android:name="com.nickfinance.nikfinance.features.main.pager.MainPagerFragment"
+        android:label="MainPagerFragment">
+
+        <action
+            android:id="@+id/toAddExpense"
+            app:destination="@id/addExpenseFragment" />
+
+        <action
+            android:id="@+id/toAddTheme"
+            app:destination="@id/addThemeFragment" />
+
+        <action
+            android:id="@+id/toDetailedExpense"
+            app:destination="@id/detailedExpenseFragment" />
+
+        <action
+            android:id="@+id/toMap"
+            app:destination="@id/mapFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addExpenseFragment"
+        android:name="com.nickfinance.nikfinance.features.add.expense.AddExpenseFragment"
+        android:label="AddExpenseFragment">
+
+        <action
+            android:id="@+id/toMainPagerFragment"
+            app:destination="@id/mainPagerFragment"
+            app:popUpTo="@id/mainPagerFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/toChooseLocationFragment"
+            app:destination="@id/chooseLocationFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addThemeFragment"
+        android:name="com.nickfinance.nikfinance.features.add.theme.AddThemeFragment"
+        android:label="AddThemeFragment">
+
+        <action
+            android:id="@+id/toMainPagerFragment"
+            app:destination="@id/mainPagerFragment"
+            app:popUpTo="@id/mainPagerFragment"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailedExpenseFragment"
+        android:name="com.nickfinance.nikfinance.features.detailedExpense.DetailedExpenseFragment"
+        android:label="AddThemeFragment">
+
+        <argument
+            android:name="data"
+            app:argType="com.nickfinance.nikfinance.domain.models.ExpenseWithTheme" />
+
+        <action
+            android:id="@+id/toMapFragment"
+            app:destination="@id/mapFragment" />
+
+        <action
+            android:id="@+id/toMainPagerFragment"
+            app:destination="@id/mainPagerFragment"
+            app:popUpTo="@id/mainPagerFragment"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.nickfinance.nikfinance.features.map.MapFragment"
+        android:label="MapFragment">
+
+        <argument
+            android:name="data"
+            app:argType="com.nickfinance.nikfinance.domain.models.ExpenseWithTheme[]" />
+
+    </fragment>
+
+    <fragment
+
+        android:id="@+id/chooseLocationFragment"
+        android:name="com.nickfinance.nikfinance.features.chooseLocation.ChooseLocationFragment"
+        android:label="ChooseLocationFragment">
+
+        <argument
+            android:name="location"
+            app:argType="string"
+            app:nullable="true" />
+
+    </fragment>
+
+</navigation>

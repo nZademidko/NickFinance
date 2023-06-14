@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTime"
+            style="@style/TextAppearance.App.Body.B1_text_reg_16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            tools:text="25 Mar 2023" />
+
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvContainer"
+        android:layout_width="186dp"
+        android:layout_height="186dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/md_theme_light_primaryContainer"
+        app:strokeColor="@color/md_theme_light_tertiary"
+        app:strokeWidth="3dp">
+
+        <LinearLayout
+            android:layout_width="186dp"
+            android:layout_height="186dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ivTheme"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
+                tools:srcCompat="@drawable/ic_map"
+                tools:tint="@color/md_theme_light_tertiary" />
+
+            <TextView
+                android:id="@+id/tvTheme"
+                style="@style/TextAppearance.App.Body.B1_text_accent_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/md_theme_light_tertiary"
+                tools:text="Образование" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tvAmount"
+        style="@style/TextAppearance.App.Title.H3_text_accent_20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/black"
+        tools:text="100.50" />
+
+</LinearLayout>

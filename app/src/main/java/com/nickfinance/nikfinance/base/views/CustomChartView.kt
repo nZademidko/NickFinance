@@ -37,7 +37,7 @@ class CustomChartView(context: Context, attrs: AttributeSet) : LinearLayout(cont
             pieDataSet.valueTextSize = 0f
             pieDataSet.sliceSpace = 4f
             pieDataSet.isHighlightEnabled = true
-            vChart.holeRadius = 95f
+            vChart.holeRadius = 90f
             vChart.legend.isEnabled = false
             vChart.setDrawEntryLabels(false)
             vChart.setHoleColor(context.resources.getColor(R.color.transparent, context.theme))

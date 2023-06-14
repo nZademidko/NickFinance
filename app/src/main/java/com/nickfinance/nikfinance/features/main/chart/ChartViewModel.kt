@@ -12,9 +12,8 @@ import com.nickfinance.nikfinance.R
 import com.nickfinance.nikfinance.base.BaseViewModel
 import com.nickfinance.nikfinance.base.adapter.BaseRowHolder
 import com.nickfinance.nikfinance.base.adapter.holders.ThemeHolder
-import com.nickfinance.nikfinance.data.models.Theme
+import com.nickfinance.nikfinance.domain.models.Theme
 import com.nickfinance.nikfinance.domain.models.ExpenseWithTheme
-import com.nickfinance.nikfinance.domain.repositories.abstractions.MainRepository
 import com.nickfinance.nikfinance.features.main.pager.MainPagerViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

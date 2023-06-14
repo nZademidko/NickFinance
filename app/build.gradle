@@ -89,4 +89,11 @@ dependencies {
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
     implementation 'com.github.blackfizz:eazegraph:1.2.5l@aar'
     implementation 'com.nineoldandroids:library:2.4.0'
+
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
+
+    implementation 'com.yandex.android:maps.mobile:4.3.1-lite'
+    implementation 'com.caverock:androidsvg-aar:1.4'
+
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 }

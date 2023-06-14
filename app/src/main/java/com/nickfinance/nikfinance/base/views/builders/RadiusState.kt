@@ -39,5 +39,13 @@ enum class RadiusState(
         topRightRadius = 0f,
         bottomLeftRadius = 0f,
         bottomRightRadius = 0f
+    ),
+    RADIUS_CIRCLE(
+        topMargin = 4,
+        bottomMargin = 4,
+        topLeftRadius = 32f,
+        topRightRadius = 32f,
+        bottomLeftRadius = 32f,
+        bottomRightRadius = 32f
     )
 }

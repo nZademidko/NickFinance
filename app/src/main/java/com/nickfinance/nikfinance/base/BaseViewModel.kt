@@ -1,6 +1,8 @@
 package com.nickfinance.nikfinance.base
 
 import android.app.Application
+import android.os.Bundle
+import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
@@ -11,13 +13,45 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.receiveAsFlow
 
-open class BaseViewModel(application: Application) : AndroidViewModel(application) {
+open class BaseViewModel(application: Application) : AndroidViewModel(application),
+    FragmentResultListener {
 
-    protected val navigationAction = Channel<NavigationAction>()
+    private val navigationAction = Channel<NavigationAction>()
     val _navigationAction = navigationAction.receiveAsFlow()
 
+    private val fragmentResultAction = Channel<Pair<Int, Bundle>>()
+    val _fragmentResultAction = fragmentResultAction.receiveAsFlow()
+
+    private val requestPermissionChannel =
+        Channel<Pair<PermissionFragment.RequestPermissions, List<PermissionFragment.PermissionType>>>()
+    val _requestPermissionAction = requestPermissionChannel.receiveAsFlow()
+
+    private val showSnackBarChannel = Channel<CharSequence>()
+    val _showSnackBarAction = showSnackBarChannel.receiveAsFlow()
+
     fun onBackPressed() = viewModelScope.launch {
-        navigationAction.send(NavigationAction.navigateBack)
+        navigationAction.send(NavigationAction.NavigateBack)
+    }
+
+    override fun onFragmentResult(requestKey: String, result: Bundle) {}
+
+    protected fun navigateTo(nav: NavDirections) = viewModelScope.launch {
+        navigationAction.send(NavigationAction.NavigateTo(nav))
+    }
+
+    protected fun requestPermission(
+        reqPermissions: PermissionFragment.RequestPermissions,
+        list: List<PermissionFragment.PermissionType>
+    ) = viewModelScope.launch {
+        requestPermissionChannel.send(Pair(reqPermissions, list))
+    }
+
+    protected fun showSnackBar(text: CharSequence) = viewModelScope.launch {
+        showSnackBarChannel.send(text)
+    }
+
+    protected fun setFragmentResult(key: Int, bundle: Bundle) = viewModelScope.launch {
+        fragmentResultAction.send(Pair(key, bundle))
     }
 
     protected inline fun <reified Model> doJob(
@@ -38,12 +72,12 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
 
     protected inline fun <reified Model> doFlowJob(
         crossinline onLoading: () -> Unit = {},
-        crossinline onProgress: () -> Flow<Model>,
+        crossinline onProgress: suspend CoroutineScope.() -> Flow<Model>,
         crossinline onFinish: (result: Result<Model>) -> Unit
     ) {
         onLoading.invoke()
         viewModelScope.launch {
-            withContext(Dispatchers.IO) { onProgress.invoke() }
+            withContext(Dispatchers.IO) { onProgress.invoke(this) }
                 .catch { it ->
                     if (it is java.lang.IllegalStateException) {
                         throw java.lang.IllegalStateException(it.message)
@@ -56,7 +90,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     sealed class NavigationAction {
-        class navigateTo(val navDirections: NavDirections) : NavigationAction()
-        object navigateBack : NavigationAction()
+        class NavigateTo(val navDirections: NavDirections) : NavigationAction()
+        object NavigateBack : NavigationAction()
     }
 }

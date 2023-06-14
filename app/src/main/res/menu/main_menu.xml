@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/main_item"
+        android:title="Главная">
+        <menu>
+            <item
+                android:id="@+id/expense_map_item"
+                android:checkable="true"
+                android:icon="@drawable/ic_map"
+                android:title="Карта трат" />
+        </menu>
+    </item>
+
+</menu>
